@@ -18,7 +18,7 @@ print(sizeHist)
 dev.off()
 
 uniqDocName <- unique(results$Name)
-featuresElements <- c("GT-pagecount", "GT-paragraphcount", "GT-wordcount")
+featuresElements <- c("GT-format", "GT-platform", "GTVB-pagecount", "GT-paragraphcount", "GT-wordcount", "GT-numCol")
 swSC <- data.frame(TestCase=uniqDocName)
 for (feat in featuresElements) {
   swSC[[feat]] <- rep(NA,length(uniqDocName))
