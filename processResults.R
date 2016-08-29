@@ -31,11 +31,11 @@ for (nam in uniqDocName) {
   
 }
 
-swSC <- swSC[swSC$Format=="doc",]
-wsScat <- ggplot(swSC, aes(x=Word, y=Size)) + geom_point()
-png(filename = paste(pathPlots, "wordSizeSCP.png", sep=""), width = 1800, height = 1200, res=300)
-print(wsScat)
-dev.off()
+# swSC <- swSC[swSC$Format=="doc",]
+# wsScat <- ggplot(swSC, aes(x=Word, y=Size)) + geom_point()
+# png(filename = paste(pathPlots, "wordSizeSCP.png", sep=""), width = 1800, height = 1200, res=300)
+# print(wsScat)
+# dev.off()
 
 
 
