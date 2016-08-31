@@ -21,3 +21,25 @@ png(
 )
 print(mimeHist)
 dev.off()
+
+
+ptTable <- read.table(
+  paste(pathGov,"PTtable.csv", sep = ""),
+  header = TRUE, sep = ",", stringsAsFactors = FALSE
+)
+
+pLine <- ptScater <- ggplot(ptTable, aes(x=sample_size, y=pcoverage)) + geom_line()
+png(
+  filename = paste(pathGov, "pcoverage.png", sep = ""), width = 1800, height = 1200, res =
+    300
+)
+print(pLine)
+dev.off()
+
+ptScater <- ggplot(ptTable, aes(x=pcoverage, y=tcoverage, size=sample_size)) + geom_point()
+png(
+  filename = paste(pathGov, "ptcoverage.png", sep = ""), width = 1800, height = 1200, res =
+    300
+)
+print(ptScater)
+dev.off()
