@@ -1,5 +1,5 @@
 library(ggplot2)
-
+library(plotly)
 
 ### process samples and govdocs 
 ###
@@ -13,7 +13,6 @@ results <-
   )
 
 
-
 ### mime type histogram 
 mimeHist <-
   ggplot(results, aes(x = reorder(mime,-amount), y = amount)) + geom_bar(stat = "identity") +
@@ -25,6 +24,8 @@ png(
 )
 print(mimeHist)
 dev.off()
+
+
 
 
 ptTable <- read.table(
