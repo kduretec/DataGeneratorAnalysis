@@ -1,3 +1,10 @@
+#####
+
+OBSOLETE
+
+####
+
+
 library(ggplot2)
 library(plotly)
 
@@ -33,15 +40,3 @@ png(filename = paste(pathGov, "pcoverage.png", sep = ""), width = 1800, height =
 print(pLine)
 dev.off()
 ggplotly(pLine)
-
-p <- plot_ly(x=ptTable$sample_size, y=ptTable$pcoverage, z=ptTable$tcoverage) %>% add_surface()
-p
-
-# 
-# ptScater <- ggplot(ptTable, aes(x=pcoverage, y=tcoverage, size=sample_size)) + geom_point()
-# png(
-#   filename = paste(pathGov, "ptcoverage.png", sep = ""), width = 1800, height = 1200, res =
-#     300
-# )
-# print(ptScater)
-# dev.off()
