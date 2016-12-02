@@ -9,6 +9,11 @@ readDocumentMeasures <- function(file) {
   df <- data.frame(measure=sapply(data[measuresPath], function(x) xmlGetAttr(x, "name")),
                    value=sapply(data[measuresPath], xmlValue)
   )
+  docName <- xmlValue(data["//evaluationResults/input"][[1]])
+  softName <- xmlValue(data["//evaluationResults/tool"][[1]])
+  df$testCaseName <- docName
+  df$toolName <- softName
+  return(df)
 }
 
 file <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/GroundTruth/Metadata/000964_PSMDoc_doc_Win7-Office2010.xml"
@@ -22,4 +27,5 @@ readTestMetadata <- function(file) {
                    )
   docName <- xmlValue(data["//metadata/document"][[1]])
   df$testCaseName <- docName
+  return(df)
 }
