@@ -5,7 +5,7 @@ source('utils.R')
 pathDocuments <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/Documents/"
 pathToolOutput <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/ToolOutput/"
 
-tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13")
+tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "TextUtil")
   
 listFiles <- list.files(pathDocuments)
 
