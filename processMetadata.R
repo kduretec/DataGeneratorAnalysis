@@ -1,3 +1,4 @@
+library(ggplot2)
 source('utils.R')
 
 pathDocuments <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/Documents/"
@@ -30,3 +31,7 @@ for (meas in uniqMeasures) {
 }
 
 colnames(testMetadata) <- c("testCaseName", uniqMeasures)
+
+
+sizePlot <- ggplot(testMetadata, aes(x=as.numeric(size.FITS))) + geom_histogram()
+sizePlot

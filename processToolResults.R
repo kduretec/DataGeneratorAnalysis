@@ -5,7 +5,8 @@ source('utils.R')
 pathDocuments <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/Documents/"
 pathToolOutput <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/ToolOutput/"
 
-tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "TextUtil")
+tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "TextUtil", "DocToText", "AbiWord", 
+           "LibreOffice")
   
 listFiles <- list.files(pathDocuments)
 
@@ -26,7 +27,7 @@ for (tool in tools) {
 
 dfHolder$value <- as.numeric(as.character(dfHolder$value))
 dfHolder <- dfHolder[!is.nan(dfHolder$value),]
-
+dfHolder <- dfHolder[dfHolder$measure=="percCorrect",]
 barPlot <- ggplot(dfHolder, aes(x=factor(testCaseName), y=value, fill=toolName)) + 
   geom_bar(stat="identity", position="dodge") +
   coord_flip()
