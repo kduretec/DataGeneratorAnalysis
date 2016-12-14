@@ -33,3 +33,9 @@ barPlot <- ggplot(dfHolder, aes(x=factor(testCaseName), y=value, fill=toolName))
   coord_flip()
 barPlot
 
+totalResults <- dfHolder[,c(FALSE,TRUE,FALSE,TRUE)]
+totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
+  
+barPlot2 <- ggplot(totalResults, aes(x=factor(toolName), y=value)) + 
+  geom_bar(stat="identity", position="dodge") 
+barPlot2
