@@ -3,7 +3,7 @@ library(XML)
 file <- "/Users/kresimir/Projects/TestDataGenerator/ToolEvaluator/src/test/resources/ApacheTika/results/testCase1.xml"
 
 
-readDocumentMeasures <- function(file) {
+readDocumentMeasures <- function(file, format) {
   data <- xmlParse(file)
   measuresPath <- "//documentResults/measures/measure"
   df <- data.frame(measure=sapply(data[measuresPath], function(x) xmlGetAttr(x, "name")),
@@ -13,6 +13,7 @@ readDocumentMeasures <- function(file) {
   softName <- xmlValue(data["//evaluationResults/tool"][[1]])
   df$testCaseName <- docName
   df$toolName <- softName
+  df$format <- format
   return(df)
 }
 
