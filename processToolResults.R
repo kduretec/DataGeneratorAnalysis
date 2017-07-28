@@ -198,3 +198,34 @@ barPlotAllResults <- ggplot(allTotalResults, aes(x=toolName, y=value, fill=measu
         legend.position="bottom", legend.title=element_blank(), 
         legend.text=element_text(size=15))
 barPlotAllResults
+
+
+
+
+
+
+
+
+##########################
+# calculating the worst  #
+# 10 files for each tool #
+##########################
+
+tools <- c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord")
+for (tool in tools) {
+  
+  currentToolRes <- dfHolder[dfHolder$toolName==tool & dfHolder$measure=="percCorrect",]
+  currentToolRes$value <- as.numeric(as.character(currentToolRes$value))
+  currentToolRes <- currentToolRes[order(currentToolRes$value),]
+  write.table(currentToolRes[1:10,], paste("output/",tool,".tsv", sep=""), sep="\t",row.names=FALSE, 
+              col.names = TRUE)
+  
+}
+
+
+
+
+
+
+
+
