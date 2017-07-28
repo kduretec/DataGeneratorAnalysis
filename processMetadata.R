@@ -48,6 +48,7 @@ paragraphCountHist
 
 
 pageparagScater <- ggplot(testMetadata, aes(x=pagecount.GenerationProcess, y=paragraphcount.DataGenerator)) + geom_point() + 
-  labs(x="Page Count", y="Paragraph Count")
+  labs(x="Page Count", y="Paragraph Count") + theme_bw() +
+  theme(axis.text = element_text(size=20), axis.title = element_text(size=20))
 pageparagScater
 

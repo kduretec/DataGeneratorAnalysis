@@ -1,12 +1,12 @@
 library(ggplot2)
-
+library(ggsci)
 source('utils.R')
 
 pathDocuments <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/Documents/"
 pathToolOutput <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/ToolOutput/"
 
 tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "DocToText", 
-           "Xpdf")
+           "Xpdf", "icecite", "AbiWord")
   
 listFiles <- list.files(pathDocuments)
 
@@ -41,7 +41,7 @@ dfHolder[dfHolder$toolName=="ApacheTika_113",]$toolName <- "Apache Tika v1.13"
 ############
 # ALL FORMATS 
 ###########
-
+allTotalResults <- data.frame(toolName=character(), measureName=character(), value=numeric())
 
 #avgCorrect 
 dfAvgCorrect <- dfHolder[dfHolder$measure=="percCorrect",]
@@ -51,9 +51,10 @@ dfAvgCorrect$value <- as.numeric(as.character(dfAvgCorrect$value))
 
 totalResults <- dfAvgCorrect[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
-  
+totalResults$measureName <- "avgCorrect"
+allTotalResults <-   totalResults
 barPlotAvgCorrect <- ggplot(totalResults, aes(x=toolName, y=value)) + 
   geom_bar(stat="identity", position="dodge", width = 0.7) + 
   geom_text(aes(label=round(value, digits = 3)), position = position_dodge(width=0.9),vjust=-0.25) +
@@ -70,8 +71,10 @@ dfAvgOrder[dfAvgOrder$value==FALSE,]$value <- 0
 
 totalResults <- dfAvgOrder[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
+totalResults$measureName <- "avgOrder"
+allTotalResults <-  rbind(allTotalResults, totalResults)
 
 barPlotAvgOrder <- ggplot(totalResults, aes(x=toolName, y=value)) + 
   geom_bar(stat="identity", position="dodge", width = 0.7) + 
@@ -87,8 +90,10 @@ dfAvgLayout$value <- as.numeric(as.character(dfAvgLayout$value))
 
 totalResults <- dfAvgLayout[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
+totalResults$measureName <- "avgLayout"
+allTotalResults <-  rbind(allTotalResults, totalResults)
 
 barPlotAvgLayout <- ggplot(totalResults, aes(x=toolName, y=value)) + 
   geom_bar(stat="identity", position="dodge", width = 0.7) + 
@@ -98,6 +103,17 @@ barPlotAvgLayout <- ggplot(totalResults, aes(x=toolName, y=value)) +
 barPlotAvgLayout
 
 
+allTotalResults$measureName <- factor(allTotalResults$measureName, levels=c("avgCorrect", "avgOrder", "avgLayout"))
+barPlotAllResults <- ggplot(allTotalResults, aes(x=toolName, y=value, fill=measureName)) + 
+  geom_bar(stat="identity", position="dodge", width = 0.75, colour="gray25") + 
+  geom_text(aes(label=round(value, digits = 2)), position = position_dodge(width=0.8), vjust=-0.5, size=5) +
+  scale_y_continuous(limits = c(0,1.00)) +
+  scale_fill_brewer() + theme_bw() + 
+  theme(axis.title.x = element_blank(), axis.title.y=element_blank(), 
+        axis.text = element_text(size=17), axis.title = element_text(size=20),
+        legend.position="bottom", legend.title=element_blank(), 
+        legend.text=element_text(size=15))
+barPlotAllResults
 
 
 
@@ -106,6 +122,7 @@ barPlotAvgLayout
 # ONLY PDF
 ###########
 
+allTotalResults <- data.frame(toolName=character(), measureName=character(), value=numeric())
 
 #avgCorrect 
 dfAvgCorrect <- dfHolder[dfHolder$measure=="percCorrect",]
@@ -116,8 +133,10 @@ dfAvgCorrect$value <- as.numeric(as.character(dfAvgCorrect$value))
 
 totalResults <- dfAvgCorrect[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Xpdf", "Apache Tika v1.13", "DocToText"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Xpdf", "Apache Tika v1.13", "DocToText", "icecite", "AbiWord"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
+totalResults$measureName <- "avgCorrect"
+allTotalResults <-   totalResults
 
 barPlotAvgCorrect <- ggplot(totalResults, aes(x=toolName, y=value)) + 
   geom_bar(stat="identity", position="dodge", width = 0.7) + 
@@ -136,8 +155,10 @@ dfAvgOrder[dfAvgOrder$value==FALSE,]$value <- 0
 
 totalResults <- dfAvgOrder[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Xpdf", "Apache Tika v1.13", "DocToText"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Xpdf", "Apache Tika v1.13", "DocToText", "icecite", "AbiWord"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
+totalResults$measureName <- "avgOrder"
+allTotalResults <-  rbind(allTotalResults, totalResults)
 
 barPlotAvgOrder <- ggplot(totalResults, aes(x=toolName, y=value)) + 
   geom_bar(stat="identity", position="dodge", width = 0.7) + 
@@ -154,8 +175,10 @@ dfAvgLayout$value <- as.numeric(as.character(dfAvgLayout$value))
 
 totalResults <- dfAvgLayout[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Xpdf", "Apache Tika v1.13", "DocToText"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Xpdf", "Apache Tika v1.13", "DocToText", "icecite", "AbiWord"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
+totalResults$measureName <- "avgLayout"
+allTotalResults <-  rbind(allTotalResults, totalResults)
 
 barPlotAvgLayout <- ggplot(totalResults, aes(x=toolName, y=value)) + 
   geom_bar(stat="identity", position="dodge", width = 0.7) + 
@@ -163,3 +186,15 @@ barPlotAvgLayout <- ggplot(totalResults, aes(x=toolName, y=value)) +
   scale_y_continuous(limits = c(0,1.00)) +
   labs(x="Tool Name", y="Average percentage of snippets with preserved layout (avgLayout)")
 barPlotAvgLayout
+
+allTotalResults$measureName <- factor(allTotalResults$measureName, levels=c("avgCorrect", "avgOrder", "avgLayout"))
+barPlotAllResults <- ggplot(allTotalResults, aes(x=toolName, y=value, fill=measureName)) + 
+  geom_bar(stat="identity", position="dodge", width = 0.75, colour="gray25") + 
+  geom_text(aes(label=round(value, digits = 2)), position = position_dodge(width=0.8), vjust=-0.5, size=5) +
+  scale_y_continuous(limits = c(0,1.00)) +
+  scale_fill_brewer() + theme_bw() + 
+  theme(axis.title.x = element_blank(), axis.title.y=element_blank(), 
+        axis.text = element_text(size=17), axis.title = element_text(size=20),
+        legend.position="bottom", legend.title=element_blank(), 
+        legend.text=element_text(size=15))
+barPlotAllResults
