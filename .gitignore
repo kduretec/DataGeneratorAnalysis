@@ -32,3 +32,9 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Rproj.user
+
+# My output directory
+/output
+
+#MAC DS_Store
+.DS_Store
