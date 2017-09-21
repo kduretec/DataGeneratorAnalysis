@@ -30,3 +30,20 @@ readTestMetadata <- function(file) {
   df$testCaseName <- docName
   return(df)
 }
+
+
+readVBSMetadata <- function(file, n) {
+  
+  if (file.size(file)==0) 
+    return(NULL)
+  df <- read.table(file, header=FALSE, sep=":", stringsAsFactors = FALSE)
+  if (nrow(df)==0) 
+    return(NULL)
+  metadataFrame <- data.frame(fileName=n, numPage=df[1,2], numCh=df[2,2], numWords=df[3,2], 
+                              numLines=df[4,2], numParag=df[5,2], numTables=df[6,2])
+  
+  
+  
+  return (metadataFrame)
+  
+}
