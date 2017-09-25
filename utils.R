@@ -69,3 +69,22 @@ readVBSMetadata <- function(inFolder) {
   return (metadataFrame)
   
 }
+
+assignClass <- function(bins, value, nameV) {
+  return (bins[value[[nameV]] >= bins$start & value[[nameV]] <= bins$end,]$code)
+}
+
+valueFrequencies <- function(fileBins, met, nameV) {
+  bins <- read.table(fileBins, header=TRUE, sep="\t", stringsAsFactors = FALSE)
+  bins$start <- as.numeric(bins$start)
+  bins$end <- as.numeric(bins$end)
+  bins$code <- as.numeric(bins$code)
+  met$code <- apply(met, 1, function(x) assignClass(bins, x, nameV))
+  met$code <- as.character(met$code)
+  newFrame <- aggregate(met$code, list(code=met$code), FUN=length)
+  
+  newFrame <- merge(bins, newFrame, by="code")
+  
+  barPlot <- ggplot(newFrame, aes(x=title, y=x)) + geom_bar(stat="identity")
+  barPlot
+}
