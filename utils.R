@@ -32,17 +32,39 @@ readTestMetadata <- function(file) {
 }
 
 
-readVBSMetadata <- function(file, n) {
+readVBSMetadata <- function(inFolder) {
   
-  if (file.size(file)==0) 
-    return(NULL)
-  df <- read.table(file, header=FALSE, sep=":", stringsAsFactors = FALSE)
-  if (nrow(df)==0) 
-    return(NULL)
-  metadataFrame <- data.frame(fileName=n, numPage=df[1,2], numCh=df[2,2], numWords=df[3,2], 
-                              numLines=df[4,2], numParag=df[5,2], numTables=df[6,2])
-  
-  
+  listFiles <- list.files(inFolder)
+  numFiles <- length(listFiles)
+  metadataFrame <- data.frame(fileName=rep(NA,numFiles), numPage=rep(NA,numFiles), numCh=rep(NA,numFiles), 
+                              numWords=rep(NA,numFiles), numLines=rep(NA,numFiles), numParag=rep(NA,numFiles), 
+                              numTables=rep(NA,numFiles))
+  i <- 0
+  for (f in listFiles) {
+    i <- i + 1
+    filNameList <- unlist(strsplit(f, ".", fixed=TRUE))
+    name <- filNameList[1]
+    filePath <- paste(inFolder, "/", f, sep="")
+    if (file.size(filePath)==0) 
+      next
+    df <- read.table(filePath, header=FALSE, sep=":", stringsAsFactors = FALSE)
+    if (nrow(df)==0) 
+      next
+    # tf <- data.frame(fileName=name, numPage=df[1,2], numCh=df[2,2], numWords=df[3,2], 
+    #                  numLines=df[4,2], numParag=df[5,2], numTables=df[6,2])
+    metadataFrame[i,]$fileName <- name
+    metadataFrame[i,]$numPage <- df[1,2]
+    metadataFrame[i,]$numCh <- df[2,2]
+    metadataFrame[i,]$numWords <- df[3,2]
+    metadataFrame[i,]$numLines <- df[4,2]
+    metadataFrame[i,]$numParag <- df[5,2]
+    metadataFrame[i,]$numTables <- df[6,2]
+    # if (is.null(metadataFrame)) {
+    #   metadataFrame <- tf
+    # } else {
+    #   metadataFrame <- rbind(metadataFrame, tf)
+    # }  
+  }
   
   return (metadataFrame)
   
