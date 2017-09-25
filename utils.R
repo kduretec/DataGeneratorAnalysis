@@ -1,5 +1,5 @@
 library(XML)
-
+library(ggplot2)
 file <- "/Users/kresimir/Projects/TestDataGenerator/ToolEvaluator/src/test/resources/ApacheTika/results/testCase1.xml"
 
 
@@ -84,7 +84,22 @@ valueFrequencies <- function(fileBins, met, nameV) {
   newFrame <- aggregate(met$code, list(code=met$code), FUN=length)
   
   newFrame <- merge(bins, newFrame, by="code")
-  
-  barPlot <- ggplot(newFrame, aes(x=title, y=x)) + geom_bar(stat="identity")
-  barPlot
+  sumTotal <- sum(newFrame$x)
+  newFrame$perc <- newFrame$x/sumTotal
+  return (newFrame)
+  #barPlot <- ggplot(newFrame, aes(x=title, y=x)) + geom_bar(stat="identity")
+  #barPlot
 }
+
+saveBins <- function(folder, name, bins) {
+  barPlot <- ggplot(bins, aes(x=title, y=x)) + geom_bar(stat="identity")
+  path <- paste(folder, name,".png", sep="")
+  print(path)
+  png(filename=path, width=640, height = 480)
+    print(barPlot)
+  dev.off()
+  path <- paste(folder, name,".tsv", sep="")
+  write.table(bins, path, sep="\t", row.names = FALSE, col.names = TRUE)
+}
+
+
