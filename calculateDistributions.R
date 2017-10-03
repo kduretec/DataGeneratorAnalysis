@@ -14,17 +14,18 @@ fileMetadata$numParag <- as.numeric(fileMetadata$numParag)
 fileMetadata$numTables <- as.numeric(fileMetadata$numTables)
 fileMetadata$numWords <- as.numeric(fileMetadata$numWords)
 
-paragPageScatter <- ggplot(fileMetadata, aes(x=numPage, y=numParag)) + geom_point() +
-  scale_x_continuous(limits = c(0,50)) + 
-  scale_y_continuous(limits = c(0,100))
+paragPageScatter <- ggplot(fileMetadata, aes(x=numPage, y=numParag)) + geom_point(alpha=0.3, color="#3182bd") +
+  scale_x_continuous(limits = c(0,750)) + 
+  scale_y_continuous(limits = c(0,30000)) + theme_bw()
 path <- paste(distFolder, "paragPageScatter.png", sep="")
 png(path, width=640, heigh=480)
   print(paragPageScatter)
 dev.off()
 
-wordParagScatter <- ggplot(fileMetadata, aes(x=numWords, y=numParag)) + geom_point() +
+wordParagScatter <- ggplot(fileMetadata, aes(x=numWords, y=numParag)) + geom_point(alpha = 0.3, color="#3182bd") +
+#wordParagScatter <- ggplot(fileMetadata, aes(x=numWords, y=numParag)) + geom_bin2d() +
   scale_x_continuous(limits = c(0,50000)) + 
-  scale_y_continuous(limits = c(0,5000))
+  scale_y_continuous(limits = c(0,5000)) + theme_bw()
 path <- paste(distFolder, "wordParagScatter.png", sep="")
 png(path, width=640, heigh=480)
   print(wordParagScatter)

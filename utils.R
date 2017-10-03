@@ -2,6 +2,7 @@ library(XML)
 library(ggplot2)
 file <- "/Users/kresimir/Projects/TestDataGenerator/ToolEvaluator/src/test/resources/ApacheTika/results/testCase1.xml"
 
+basePath <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/"
 
 readDocumentMeasures <- function(file, format, toolN) {
   data <- xmlParse(file)

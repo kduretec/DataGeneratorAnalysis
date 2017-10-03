@@ -1,8 +1,9 @@
 library(ggplot2)
 source('utils.R')
 
-pathDocuments <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/Documents/"
-pathMetadata <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/GroundTruth/Metadata/"
+experiment <- "ExperimentTest"
+pathDocuments <- paste(basePath, "Generated/", experiment, "/Documents/", sep="")
+pathMetadata <- paste(basePath, "Generated/", experiment, "/GroundTruth/Metadata/", sep="")
 
 
 listFiles <- list.files(pathDocuments)
