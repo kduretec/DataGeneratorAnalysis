@@ -2,24 +2,28 @@ library(ggplot2)
 library(ggsci)
 source('utils.R')
 
-pathDocuments <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/Documents/"
-pathToolOutput <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/benchmarking/publications/JSS/Generated/ToolOutput/"
+experimentName <- "ExperimentTest"
 
-tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "DocToText", 
-           "Xpdf", "icecite", "AbiWord")
-  
+pathDocuments <- paste("/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/Generated/", experimentName, "/Documents/", sep="")
+pathResults <- paste("/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/Generated/", experimentName, "/Results/", sep="")
+pathToolResults <- paste(pathResults, "Tools/", sep="")
+
+#tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "DocToText", "Xpdf", "icecite", "AbiWord")
+ 
+listTools <- list.files(pathToolResults)
+print(listTools)
 listFiles <- list.files(pathDocuments)
 
 dfHolder <- data.frame(testCaseName=character(), toolName=character(), measure=character(), value=character(), format=character())
 
-for (tool in tools) {
-  pathToolResult <- paste(pathToolOutput, tool, "/results/", sep="")
+for (tool in listTools) {
+  pTR <- paste(pathToolResults, tool, "/results/", sep="")
   
   for (f in listFiles) {
     filNameList <- unlist(strsplit(f, ".", fixed=TRUE))
     name <- filNameList[1]
     extension <- filNameList[2]
-    fileResult <- paste(pathToolResult, name, ".xml", sep="")
+    fileResult <- paste(pTR, name, ".xml", sep="")
     if (file.exists(fileResult)) {
       print(fileResult)
       tmp <- readDocumentMeasures(fileResult, extension)
@@ -27,9 +31,10 @@ for (tool in tools) {
     }
   }
 }
-dfHolder[dfHolder$toolName=="ApacheTika_11",]$toolName <- "Apache Tika v1.1"
-dfHolder[dfHolder$toolName=="ApacheTika_12",]$toolName <- "Apache Tika v1.2"
-dfHolder[dfHolder$toolName=="ApacheTika_113",]$toolName <- "Apache Tika v1.13"
+
+#dfHolder[dfHolder$toolName=="ApacheTika_11",]$toolName <- "Apache Tika v1.1"
+#dfHolder[dfHolder$toolName=="ApacheTika_12",]$toolName <- "Apache Tika v1.2"
+#dfHolder[dfHolder$toolName=="ApacheTika_113",]$toolName <- "Apache Tika v1.13"
 
 #barPlot <- ggplot(dfAvgCorrect, aes(x=factor(testCaseName), y=value, fill=toolName)) + 
 #  geom_bar(stat="identity", position="dodge") +
@@ -217,7 +222,7 @@ for (tool in tools) {
   currentToolRes <- dfHolder[dfHolder$toolName==tool & dfHolder$measure=="percCorrect",]
   currentToolRes$value <- as.numeric(as.character(currentToolRes$value))
   currentToolRes <- currentToolRes[order(currentToolRes$value),]
-  write.table(currentToolRes[1:10,], paste("output/",tool,".tsv", sep=""), sep="\t",row.names=FALSE, 
+  write.table(currentToolRes[1:10,], paste(pathResults,tool,".tsv", sep=""), sep="\t",row.names=FALSE, 
               col.names = TRUE)
   
 }
