@@ -17,8 +17,8 @@ fileMetadata$numTables <- as.numeric(fileMetadata$numTables)
 fileMetadata$numWords <- as.numeric(fileMetadata$numWords)
 
 paragPageScatter <- ggplot(fileMetadata, aes(x=numPage, y=numParag)) + geom_point(alpha=0.3, color="#3182bd") +
-  scale_x_continuous(limits = c(0,750)) + 
-  scale_y_continuous(limits = c(0,30000)) + theme_bw()
+  scale_x_continuous(limits = c(0,2500)) + 
+  scale_y_continuous(limits = c(0,100000)) + theme_bw()
 path <- paste(distFolder, "paragPageScatter.png", sep="")
 png(path, width=640, heigh=480)
   print(paragPageScatter)
@@ -63,27 +63,26 @@ allBinsFrame <- rbind(binFrameNPag, binFrameNPar, binFrameNTab, binFrameNWo)
 combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title, 
                                 numWords=binFrameNWo$title, numTables=binFrameNTab$title)
 
-numProp <- c("numPage", "numWords", "numParag", "numTables")
+combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title)
+
+
+#numProp <- c("numPage", "numWords", "numParag", "numTables")
+numProp <- c("numPage", "numParag")
 samples <- apply(combinationFrame, 1, function(x) calculateSamples(x, allBinsFrame, fileMetadata, numProp, samplesPath))
 #sampleFrame <- rbind(samples)
 samples <- samples[!is.na(samples)]
-calculateSamples <- function(row, bins, metadata , names, path) {
-  #print(row)
-  met <- metadata
-  for (prop in names) {
-    #print(prop)
-    start <- bins[bins$feature==prop & bins$title==row[[prop]], ]$start 
-    end <- bins[bins$feature==prop & bins$title==row[[prop]], ]$end
-    met <- met[met[[prop]] >= start & met[[prop]] <= end,]
-  }
-  num <- nrow(met)
-  #print(num)
-  if (num==0) {return (NA)}
-  s <- met[sample(1:num,1), ]
-  #print(s[1,]$fileName)
-  #s$numSamples <- num
-  return (s[1,]$fileName)
+
+samplesMetadata <- fileMetadata[fileMetadata$fileName %in% samples, ]
+
+samplesScatter <- paragPageScatter + geom_point(data=samplesMetadata, aes(x=numPage, y=numParag), size=3, shape=18)
+path <- paste(distFolder, "paragPageScatterSamples.png", sep="")
+png(path, width=640, heigh=480)
+print(samplesScatter)
+dev.off()
+
+samplesMetadata <- samplesMetadata[,colnames(samplesMetadata) %in% c(numProp, "fileName")]
+samplesMetadata$fileName <- paste("sample_",samplesMetadata$fileName, sep="")
+for (nam in numProp) {
+  samplesMetadata[[nam]] <- paste(nam, ":", samplesMetadata[[nam]], sep="")
 }
-
-
-
+write.table(samplesMetadata, samplesPath, row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)

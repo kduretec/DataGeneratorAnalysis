@@ -103,4 +103,23 @@ saveBins <- function(folder, name, bins) {
   write.table(bins, path, sep="\t", row.names = FALSE, col.names = TRUE)
 }
 
+calculateSamples <- function(row, bins, metadata , names, path) {
+  #print(row)
+  met <- metadata
+  for (prop in names) {
+    #print(prop)
+    start <- bins[bins$feature==prop & bins$title==row[[prop]], ]$start 
+    end <- bins[bins$feature==prop & bins$title==row[[prop]], ]$end
+    met <- met[met[[prop]] >= start & met[[prop]] <= end,]
+  }
+  num <- nrow(met)
+  #print(num)
+  if (num==0) {return (NA)}
+  s <- met[sample(1:num,1), ]
+  #print(s[1,]$fileName)
+  #s$numSamples <- num
+  return (s[1,]$fileName)
+}
+
+
 
