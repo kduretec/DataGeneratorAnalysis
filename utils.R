@@ -93,7 +93,11 @@ valueFrequencies <- function(fileBins, met, nameV) {
 }
 
 saveBins <- function(folder, name, bins) {
-  barPlot <- ggplot(bins, aes(x=title, y=x)) + geom_bar(stat="identity")
+  bins <- transform(bins, title=reorder(title, -perc) )
+  barPlot <- ggplot(bins, aes(x=title, y=perc)) + geom_bar(stat="identity", position="dodge", color="#3182bd", fill="#3182bd") +
+    geom_text(aes(label=round(perc, digits = 3)), position = position_dodge(width=0.8), vjust=-0.5, size=5) +
+    scale_fill_brewer() + theme_bw() +
+    theme(axis.title.x = element_blank(), axis.title.y=element_blank(), axis.text = element_text(size=17))
   path <- paste(folder, name,".png", sep="")
   print(path)
   png(filename=path, width=640, height = 480)

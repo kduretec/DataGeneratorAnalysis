@@ -17,8 +17,8 @@ fileMetadata$numTables <- as.numeric(fileMetadata$numTables)
 fileMetadata$numWords <- as.numeric(fileMetadata$numWords)
 
 paragPageScatter <- ggplot(fileMetadata, aes(x=numPage, y=numParag)) + geom_point(alpha=0.3, color="#3182bd") +
-  scale_x_continuous(limits = c(0,2500)) + 
-  scale_y_continuous(limits = c(0,100000)) + theme_bw()
+  scale_x_continuous(limits = c(0,500)) + 
+  scale_y_continuous(limits = c(0,25000)) + theme_bw()
 path <- paste(distFolder, "paragPageScatter.png", sep="")
 png(path, width=640, heigh=480)
   print(paragPageScatter)
@@ -74,7 +74,8 @@ samples <- samples[!is.na(samples)]
 
 samplesMetadata <- fileMetadata[fileMetadata$fileName %in% samples, ]
 
-samplesScatter <- paragPageScatter + geom_point(data=samplesMetadata, aes(x=numPage, y=numParag), size=3, shape=18)
+samplesScatter <- paragPageScatter + geom_point(data=samplesMetadata, aes(x=numPage, y=numParag), size=3, shape=18) +
+  labs(x="number of pages", y="number of paragraphs")
 path <- paste(distFolder, "paragPageScatterSamples.png", sep="")
 png(path, width=640, heigh=480)
 print(samplesScatter)
