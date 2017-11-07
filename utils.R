@@ -77,6 +77,7 @@ assignClass <- function(bins, value, nameV) {
 
 valueFrequencies <- function(fileBins, met, nameV) {
   bins <- read.table(fileBins, header=TRUE, sep="\t", stringsAsFactors = FALSE)
+  #print(bins)
   bins$start <- as.numeric(bins$start)
   bins$end <- as.numeric(bins$end)
   bins$code <- as.numeric(bins$code)
