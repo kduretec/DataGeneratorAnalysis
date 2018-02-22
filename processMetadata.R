@@ -32,6 +32,22 @@ for (meas in uniqMeasures) {
 }
 
 colnames(testMetadata) <- c("testCaseName", uniqMeasures)
+
+#PLOT distribution of formats#
+#testMetadata$externalIdentifier.Fits <- as.character(testMetadata$externalIdentifier.Fits)
+
+formatHistPlot <- ggplot(testMetadata, aes(testMetadata$externalIdentifier.Fits)) + 
+  geom_bar(stat="count", color="#3182bd", fill="#3182bd") + theme_bw()
+  
+formatHistPlot
+
+
+
+
+
+
+
+
 testMetadata$pagecount.GenerationProcess <- as.numeric(as.character(testMetadata$pagecount.GenerationProcess))
 testMetadata$paragraphcount.DataGenerator <- as.numeric(as.character(testMetadata$paragraphcount.DataGenerator))
 
