@@ -39,7 +39,7 @@ readVBSMetadata <- function(inFolder) {
   numFiles <- length(listFiles)
   metadataFrame <- data.frame(fileName=rep(NA,numFiles), numPage=rep(NA,numFiles), numCh=rep(NA,numFiles), 
                               numWords=rep(NA,numFiles), numLines=rep(NA,numFiles), numParag=rep(NA,numFiles), 
-                              numTables=rep(NA,numFiles))
+                              numTables=rep(NA,numFiles),numWordTable=rep(NA,numFiles),numParagTable=rep(NA,numFiles))
   i <- 0
   for (f in listFiles) {
     i <- i + 1
@@ -60,6 +60,8 @@ readVBSMetadata <- function(inFolder) {
     metadataFrame[i,]$numLines <- df[4,2]
     metadataFrame[i,]$numParag <- df[5,2]
     metadataFrame[i,]$numTables <- df[6,2]
+    metadataFrame[i,]$numWordTable <- df[7,2]
+    metadataFrame[i,]$numParagTable <- df[8,2]
     # if (is.null(metadataFrame)) {
     #   metadataFrame <- tf
     # } else {

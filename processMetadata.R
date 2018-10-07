@@ -1,7 +1,7 @@
 library(ggplot2)
 source('utils.R')
 
-experiment <- "ExperimentTest"
+experiment <- "Experiment_345"
 pathDocuments <- paste(basePath, "Generated/", experiment, "/Documents/", sep="")
 pathMetadata <- paste(basePath, "Generated/", experiment, "/GroundTruth/Metadata/", sep="")
 
@@ -48,23 +48,23 @@ formatHistPlot
 
 
 
-testMetadata$pagecount.GenerationProcess <- as.numeric(as.character(testMetadata$pagecount.GenerationProcess))
-testMetadata$paragraphcount.DataGenerator <- as.numeric(as.character(testMetadata$paragraphcount.DataGenerator))
+testMetadata$number_of_pages.DataGenerator <- as.numeric(as.character(testMetadata$number_of_pages.DataGenerator))
+testMetadata$number_of_paragraphs.DataGenerator <- as.numeric(as.character(testMetadata$number_of_paragraphs.DataGenerator))
 
 sizePlot <- ggplot(testMetadata, aes(x=as.numeric(size.Fits))) + geom_histogram()
 sizePlot
 
 #pageCountHist <- ggplot(testMetadata, aes(x=pagecount.GenerationProcess)) + geom_bar()
-pageCountHist <- ggplot(testMetadata, aes(x=pagecount.GenerationProcess)) + geom_histogram(aes(y=..count..), colour = "black", fill = "grey") + 
+pageCountHist <- ggplot(testMetadata, aes(x=number_of_pages.DataGenerator)) + geom_histogram(aes(y=..count..), colour = "black", fill = "grey") + 
   labs(x="Page Count", y="Count")
 pageCountHist
 
-paragraphCountHist <- ggplot(testMetadata, aes(x=paragraphcount.DataGenerator)) + geom_histogram(aes(y=..count..), colour = "black", fill = "grey") +
+paragraphCountHist <- ggplot(testMetadata, aes(x=number_of_paragraphs.DataGenerator)) + geom_histogram(aes(y=..count..), colour = "black", fill = "grey") +
   labs(x="Paragraph Count", y="Count")
 paragraphCountHist
 
 
-pageparagScater <- ggplot(testMetadata, aes(x=pagecount.GenerationProcess, y=paragraphcount.DataGenerator)) + geom_point() + 
+pageparagScater <- ggplot(testMetadata, aes(x=number_of_pages.DataGenerator, y=number_of_paragraphs.DataGenerator)) + geom_point() + 
   labs(x="Page Count", y="Paragraph Count") + theme_bw() +
   theme(axis.text = element_text(size=20), axis.title = element_text(size=20))
 pageparagScater

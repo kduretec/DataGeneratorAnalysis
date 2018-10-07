@@ -15,6 +15,8 @@ fileMetadata$numPage <- as.numeric(fileMetadata$numPage)
 fileMetadata$numParag <- as.numeric(fileMetadata$numParag)
 fileMetadata$numTables <- as.numeric(fileMetadata$numTables)
 fileMetadata$numWords <- as.numeric(fileMetadata$numWords)
+fileMetadata$numWordTable <- as.numeric(fileMetadata$numWordTable)
+fileMetadata$numParagTable <- as.numeric(fileMetadata$numParagTable)
 
 paragPageScatter <- ggplot(fileMetadata, aes(x=numPage, y=numParag)) + geom_point(alpha=0.3, color="#3182bd") +
   scale_x_continuous(limits = c(0,100)) + 
@@ -58,19 +60,32 @@ binFrameNTab <- valueFrequencies(binPath, fileMetadata, "numTables")
 saveBins(distFolder, "tableDist", binFrameNTab)
 binFrameNTab$feature <- "numTables"
 
-allBinsFrame <- rbind(binFrameNPag, binFrameNPar, binFrameNTab, binFrameNWo) 
+#words in table distributions
+binPath <- "input/tableWordBins.txt"
+binFrameNWTab <- valueFrequencies(binPath, fileMetadata, "numWordTable")
+saveBins(distFolder, "wordTableDist", binFrameNWTab)
+binFrameNWTab$feature <- "numWordTable"
+
+#paragraphs in table distributions
+binPath <- "input/tableParagraphBins.txt"
+binFrameNPTab <- valueFrequencies(binPath, fileMetadata, "numParagTable")
+saveBins(distFolder, "paragTableDist", binFrameNPTab)
+binFrameNPTab$feature <- "numParagTable"
+
+allBinsFrame <- rbind(binFrameNPag, binFrameNPar, binFrameNTab, binFrameNWo, binFrameNWTab, binFrameNPTab) 
 
 
 
 
 # calculate representative samples 
 combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title, 
-                                numWords=binFrameNWo$title, numTables=binFrameNTab$title)
+                                numWords=binFrameNWo$title, numTables=binFrameNTab$title,
+                                numWordTable=binFrameNWTab$title, numParagTable=binFrameNPTab$title)
 
 #combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title)
 
 
-numProp <- c("numPage", "numWords", "numParag", "numTables")
+numProp <- c("numPage", "numWords", "numParag", "numTables", "numWordTable", "numParagTable")
 #numProp <- c("numPage", "numParag")
 
 samples <- apply(combinationFrame, 1, function(x) calculateSamples(x, allBinsFrame, fileMetadata, numProp, samplesPath))

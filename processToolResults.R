@@ -1,12 +1,13 @@
 library(ggplot2)
 library(ggsci)
+library(stringr)
 source('utils.R')
 
-experimentName <- "ExperimentTest"
+experimentName <- "Experiment_50_all"
 
-pathDocuments <- paste("/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/Generated/", experimentName, "/Documents/", sep="")
-pathResults <- paste("/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/Generated/", experimentName, "/Results/", sep="")
-pathToolResults <- paste(pathResults, "Tools/", sep="")
+pathDocuments <- paste("/Users/kresimir/Experiments/", experimentName, "/", experimentName ,"/Documents/", sep="")
+pathResults <- paste("/Users/kresimir/Experiments/", experimentName, "/", experimentName, "/Results/", sep="")
+pathToolResults <- paste(pathResults, "", sep="")
 
 #tools <- c("ApacheTika1_1", "ApacheTika1_2", "ApacheTika1_13", "DocToText", "Xpdf", "icecite", "AbiWord")
  
@@ -56,7 +57,7 @@ dfAvgCorrect$value <- as.numeric(as.character(dfAvgCorrect$value))
 
 totalResults <- dfAvgCorrect[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "Apache Tika v1.19", "DocToText v4.01512", "AbiWord v3.0.0"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
 totalResults$measureName <- "avgCorrect"
 allTotalResults <-   totalResults
@@ -76,7 +77,7 @@ dfAvgOrder[dfAvgOrder$value==FALSE,]$value <- 0
 
 totalResults <- dfAvgOrder[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "Apache Tika v1.19", "DocToText v4.01512", "AbiWord v3.0.0"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
 totalResults$measureName <- "avgOrder"
 allTotalResults <-  rbind(allTotalResults, totalResults)
@@ -95,7 +96,7 @@ dfAvgLayout$value <- as.numeric(as.character(dfAvgLayout$value))
 
 totalResults <- dfAvgLayout[,c(FALSE,TRUE,FALSE,TRUE)]
 totalResults <- aggregate(value~toolName, totalResults, FUN = mean)
-totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "DocToText", "AbiWord"),]
+totalResults <- totalResults[totalResults$toolName %in% c("Apache Tika v1.1", "Apache Tika v1.2", "Apache Tika v1.13", "Apache Tika v1.19", "DocToText v4.01512", "AbiWord v3.0.0"),]
 totalResults <- transform(totalResults, toolName = reorder(toolName, -value))
 totalResults$measureName <- "avgLayout"
 allTotalResults <-  rbind(allTotalResults, totalResults)
@@ -108,19 +109,21 @@ barPlotAvgLayout <- ggplot(totalResults, aes(x=toolName, y=value)) +
 barPlotAvgLayout
 
 
+allTotalResults$toolName <- str_wrap(allTotalResults$toolName, width=10)
 allTotalResults$measureName <- factor(allTotalResults$measureName, levels=c("avgCorrect", "avgOrder", "avgLayout"))
 barPlotAllResults <- ggplot(allTotalResults, aes(x=toolName, y=value, fill=measureName)) + 
   geom_bar(stat="identity", position="dodge", width = 0.75, colour="gray25") + 
-  geom_text(aes(label=round(value, digits = 2)), position = position_dodge(width=0.8), vjust=-0.5, size=5) +
+  geom_text(aes(label=round(value, digits = 2)), position = position_dodge(width=0.8), vjust=-0.5, size=4) +
   scale_y_continuous(limits = c(0,1.00)) +
   scale_fill_brewer() + theme_bw() + 
   theme(axis.title.x = element_blank(), axis.title.y=element_blank(), 
-        axis.text = element_text(size=17), axis.title = element_text(size=20),
+        axis.text = element_text(size=12), axis.title = element_text(size=16),
         legend.position="bottom", legend.title=element_blank(), 
         legend.text=element_text(size=15))
-barPlotAllResults
-
-
+pathPlot <- paste(pathResults, "allPlot.png", sep="");
+png(pathPlot, width=640, heigh=480)
+print(barPlotAllResults)
+dev.off()
 
 
 ############
@@ -204,7 +207,7 @@ barPlotAllResults <- ggplot(allTotalResults, aes(x=toolName, y=value, fill=measu
         legend.text=element_text(size=15))
 barPlotAllResults
 
-
+png(path, width=640, heigh=480)
 
 
 

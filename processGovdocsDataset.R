@@ -7,12 +7,12 @@
 
 source('utils.R')
 
-folderIN <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/real world dataset/vbsproperties/"
+folderIN <- "/Users/kresimir/Dropbox/Work/Projects/BenchmarkDP/publications/INFSOF/experiments/real world dataset/vbsproperties2/"
 
 listFiles <- list.files(folderIN)
 
 fileMetadata <- data.frame(fileName=character(), numPage=character(), numCh=character(), numWords=character(), 
-                           numLines=character(), numParag=character(), numTables=character())
+                           numLines=character(), numParag=character(), numTables=character(), numWordTable=character(), numParagTable=character())
 
 tUZFolder<- "temp"
 
