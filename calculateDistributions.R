@@ -78,15 +78,22 @@ allBinsFrame <- rbind(binFrameNPag, binFrameNPar, binFrameNTab, binFrameNWo, bin
 
 
 # calculate representative samples 
+#combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title, 
+#                                numWords=binFrameNWo$title, numTables=binFrameNTab$title,
+#                                numWordTable=binFrameNWTab$title, numParagTable=binFrameNPTab$title)
+
 combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title, 
-                                numWords=binFrameNWo$title, numTables=binFrameNTab$title,
-                                numWordTable=binFrameNWTab$title, numParagTable=binFrameNPTab$title)
+                                numWords=binFrameNWo$title, numTables=binFrameNTab$title)
+
 
 #combinationFrame <- expand.grid(numParag=binFrameNPar$title, numPage=binFrameNPag$title)
 
 
-numProp <- c("numPage", "numWords", "numParag", "numTables", "numWordTable", "numParagTable")
+#numProp <- c("numPage", "numWords", "numParag", "numTables", "numWordTable", "numParagTable")
+numProp <- c("numPage", "numWords", "numParag", "numTables")
 #numProp <- c("numPage", "numParag")
+
+numPropToSave <- c("numPage", "numWords", "numParag", "numTables", "numWordTable", "numParagTable")
 
 samples <- apply(combinationFrame, 1, function(x) calculateSamples(x, allBinsFrame, fileMetadata, numProp, samplesPath))
 #sampleFrame <- rbind(samples)
@@ -110,9 +117,9 @@ print(samplesScatter2)
 dev.off()
 
 
-samplesMetadata <- samplesMetadata[,colnames(samplesMetadata) %in% c(numProp, "fileName")]
+samplesMetadata <- samplesMetadata[,colnames(samplesMetadata) %in% c(numPropToSave, "fileName")]
 samplesMetadata$fileName <- paste("sample_",samplesMetadata$fileName, sep="")
-for (nam in numProp) {
+for (nam in numPropToSave) {
   samplesMetadata[[nam]] <- paste(nam, ":", samplesMetadata[[nam]], sep="")
 }
 write.table(samplesMetadata, samplesPath, row.names = FALSE, col.names = FALSE, sep = "\t", quote = FALSE)
